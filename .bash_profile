@@ -57,16 +57,16 @@ function run() {
 # The order of the arguments doesn't matter and [-v or -c] is optional
 # -v stands for open the created file in vim editor
 # -c stands for open the creadted file in vscode (If it is installed)
+# You can provide any number of files
 
 function out() {
     
     if [ $# -eq 0 ]; then
         echo "Too Few Arguments";
         return;
-    elif [ $# -gt 2 ]; then
-        echo "Too Many Arguments";
-        return;
     fi
+
+    local i=0;
 
     for temp in $@; do
         case $temp in
@@ -74,10 +74,12 @@ function out() {
                 local flag=$temp;
                 ;;
             *.c)
-                local file=$temp;
+                local files[$i]=$temp;
+                (( i++ ));
                 ;;
             *.cpp)
-                local file=$temp;
+                local files[$i]=$temp;
+                (( i++ ));
                 ;;
             *)
                 echo "Invalid Argument";
@@ -86,34 +88,35 @@ function out() {
         esac
     done
 
-    if [ -z ${file+x} ]; then
-        echo "File Name Recquired";
+    if [ ${#files[@]} -eq 0 ]; then
+        echo "File Name Required";
         return;
-    else
+    fi
+
+    for file in ${files[@]}; do
         local extension=${file#*.};
         local source="outline."$extension;
         if [ -e $file ]; then
-            echo "File Already exists";
+            echo "$file Already exists";
             read -p "Do You Wanna replace its contents?[Y/N] : " permission;
 
             if [ $permission == n -o $permission == N ]; then
-                return;
+                continue;
             fi
         fi
         touch $file;
         cp ~/$source $file;
-    fi
 
-    if [ ! -z ${flag+x} ]; then
-        if [ $flag == "-v" ]; then
-            vim $file;
-        elif [ $flag == "-c" ]; then
-            code -r $file;
-        else
-            echo "Invalid Flag";
+        if [ ! -z ${flag+x} ]; then
+            if [ $flag == "-v" ]; then
+                vim $file;
+            elif [ $flag == "-c" ]; then
+                code -r $file;
+            else
+                echo "Invalid Flag";
+            fi
         fi
-    fi
-
+    done
 
 }
 
