@@ -16,8 +16,8 @@ alias edu="cd /mnt/d";
 # My function to compile C and C++ easily
 function compile() {
 
-	for file in $@; do
-		local extension=${file#*.};
+	for file in $@; do      #looping through all the files passed in as arguments
+		local extension=${file#*.};     #storing the extension and executable of the file
 		local executable=${file%.*};
 		case $extension in
 			c)
@@ -39,12 +39,12 @@ function run() {
 	
     for file in $@; do
 		local executable=${file%.*};
-		if  [ -e $executable ]; then
+		if  [ -e $executable ]; then    #checking if the file was already compiled
 			echo -e "\n----- Running : ${file} -----\n";
 			./$executable;
-		else
+		else    # if it's not compiled already, the compile it and then run the executable
 			echo -e "\n----- Running : ${file} -----\n";
-			compile $file;
+			compile $file;      # compile function is declared above
 			./$executable;
 		fi
 	done
@@ -52,7 +52,11 @@ function run() {
 }
 
 
-#My function to give outline to C and C++ files
+# My function to give outline to C and C++ files
+# SYNTAX : out [-v or -c] [C or CPP file]
+# The order of the arguments doesn't matter and [-v or -c] is optional
+# -v stands for open the created file in vim editor
+# -c stands for open the creadted file in vscode (If it is installed)
 
 function out() {
     
