@@ -81,6 +81,10 @@ function out() {
                 local files[$i]=$temp;
                 (( i++ ));
                 ;;
+            *.py)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
             *)
                 echo "Invalid Argument";
                 return;
