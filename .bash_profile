@@ -85,6 +85,10 @@ function out() {
                 local files[$i]=$temp;
                 (( i++ ));
                 ;;
+            *.java)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
             *)
                 echo "Invalid Argument";
                 return;
@@ -98,6 +102,7 @@ function out() {
     fi
 
     for file in ${files[@]}; do
+        local class=${file%.*};     #Only for java files
         local extension=${file#*.};
         local source="outline."$extension;
         if [ -e $file ]; then
@@ -109,6 +114,13 @@ function out() {
             fi
         fi
         touch $file;
+
+        # For java files we need to change the class name
+        if [ $extension == "java" ]; then
+            sed -i "s/class .*/class ${class} {/" ~/$source;
+        fi
+
+
         cp ~/$source $file;
 
         if [ ! -z ${flag+x} ]; then
