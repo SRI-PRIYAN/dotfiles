@@ -34,23 +34,75 @@ function compile() {
 
 }
 
-# compiles all the dependancies (i.e., all the cpp files associated with the local header files included)
+# compiles all the dependancies (i.e., all the c and cpp files associated with the local header files included)
 function comdep() {
     regex="^\"(.*)\"$";
     for file in $@; do
         local extension=${file#*.};
+        
+        if [[ $extension == "c" ]]; then
+            local compiler="gcc";
+        elif [[ $extension == "cpp" ]]; then
+            local compiler="g++";
+        else
+            echo "Invalid File";
+            return;
+        fi
+        
         local executable=${file%.*};
         local i=0;
         local temp=( $(grep "#include \"*\"" $file | cut -f2 -d " ") );
         for line in ${temp[@]}; do
             [[ $line =~ $regex ]] && headers=${BASH_REMATCH[1]};
+            
             if [[ ${headers#*.} == "h" ]]; then
-                local dependancies[$i]=${headers%.*}"."${extension};
+                local dep_file=${headers%.*}"."${extension};
+                local temp="^${dep_file}$"
+                if [[ ${dependancies[*]} =~ ${dep_file} ]]; then
+                    continue;
+                fi
+                local dependancies[$i]=$dep_file;
                 (( i++ ));
             fi
+        
         done
-        g++ ${dependancies[@]} $file -o ${executable};
+        $compiler ${dependancies[@]} $file -o ${executable};
     done
+}
+
+# Creates classes for C++ files (Both header as well as cpp files)
+function class() {
+    if [[ $# -eq 0 ]]; then
+        echo "Class Name Required";
+        return;
+    fi
+
+    for class_name in $@; do
+        local header="${class_name}.h"
+        local source="${class_name}.cpp"
+
+        if [[ -e $header || -e $source ]]; then
+            read -p "$header or $source already exists. Do You wanna replace them? [Y/N]" permisson;
+        fi
+
+        if [[ $permisson == "n" || $permisson == "N" ]]; then
+            unset permisson;
+            continue;
+        fi
+
+        sed -i "s/type/${class_name}/g" ~/class.h;
+        sed -i "s/type/${class_name}/g" ~/class.cpp;
+
+        cp ~/class.h $header;
+        cp ~/class.cpp $source;
+
+        sed -i "s/${class_name}/type/g" ~/class.h;
+        sed -i "s/${class_name}/type/g" ~/class.cpp;
+
+    
+    done
+
+
 }
 
 # My function to run C and C++ executable files easily
