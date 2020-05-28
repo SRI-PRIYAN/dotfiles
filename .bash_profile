@@ -34,6 +34,25 @@ function compile() {
 
 }
 
+# compiles all the dependancies (i.e., all the cpp files associated with the local header files included)
+function comdep() {
+    regex="^\"(.*)\"$";
+    for file in $@; do
+        local extension=${file#*.};
+        local executable=${file%.*};
+        local i=0;
+        local temp=( $(grep "#include \"*\"" $file | cut -f2 -d " ") );
+        for line in ${temp[@]}; do
+            [[ $line =~ $regex ]] && headers=${BASH_REMATCH[1]};
+            if [[ ${headers#*.} == "h" ]]; then
+                local dependancies[$i]=${headers%.*}"."${extension};
+                (( i++ ));
+            fi
+        done
+        g++ ${dependancies[@]} $file -o ${executable};
+    done
+}
+
 # My function to run C and C++ executable files easily
 function run() {
 	
