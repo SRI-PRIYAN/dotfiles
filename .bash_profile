@@ -90,14 +90,11 @@ function class() {
             continue;
         fi
 
-        sed -i "s/type/${class_name}/g" ~/class.h;
-        sed -i "s/type/${class_name}/g" ~/class.cpp;
-
         cp ~/class.h $header;
         cp ~/class.cpp $source;
 
-        sed -i "s/${class_name}/type/g" ~/class.h;
-        sed -i "s/${class_name}/type/g" ~/class.cpp;
+        sed -i "s/x/${class_name}/g" $header;
+        sed -i "s/x/${class_name}/g" $source;
 
     
     done

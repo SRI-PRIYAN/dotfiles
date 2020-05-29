@@ -1,7 +1,9 @@
-#include <iostypeream>
-#include "type.h"
+#include <iostream>
+#include "x.h"
 
-type::type() {
+using namespace std;
+
+x::x() {
 
 
 }

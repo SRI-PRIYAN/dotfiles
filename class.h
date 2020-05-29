@@ -1,7 +1,7 @@
 #pragma once
 
-class type {
+class x {
 public:
-    type();
+    x();
 
 };
