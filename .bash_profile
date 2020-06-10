@@ -9,9 +9,11 @@ for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
 done;
 unset file;
 
-
+#aliases
 alias winhome="cd /mnt/c/users/ELCOT";
 alias edu="cd /mnt/d";
+alias 'ls-detail'="ls -C -c -lt --color -s --size";
+alias reload-bash="source .bash_profile"
 
 # My function to compile C and C++ easily
 function compile() {
@@ -202,6 +204,46 @@ function out() {
         fi
     done
 
+}
+#Function to create Directory and enter the directory
+#Combining mkdir+cd commands
+#Inspired from Missing Semester classes MIT
+#SYNTAX: mcd dir_name
+function mcd(){
+        if [ $# -eq 0 ]; then
+                echo "Too few arguments"
+                return
+        fi
+        declare -a list
+        readarray list < <(find -name "$1" -type d)
+        if [ ${#list[@]} -ne 0 ];then
+                echo "Directory name already exists"
+                echo "Do you want to Open the existing directory[Y/N] ?:"
+                read  ans
+                if [ "$ans" == Y -o "$ans" == y ];then
+                        cd "$1"
+                        return
+                fi
+        fi
+        mkdir "$1"
+        echo "Directory created"
+        cd "$1"
+}
+#Function to access tldr help pages
+#Just to make tldr command more self-explanative and intuitive
+#
+function Help(){
+         if [ $# -eq 0 ]; then
+                echo "Too few arguments"
+                return
+        fi
+        if [ $# -gt 1 ]; then
+                echo "Too many arguments"
+                echo "Give one command at a time"
+                return
+        fi
+        echo -e "\n------------ "$1"--------------\n"
+        tldr "$1"
 }
 
 # Case-insensitive globbing (used in pathname expansion)
