@@ -13,9 +13,9 @@ unset file;
 alias winhome="cd /mnt/c/users/ELCOT";
 alias edu="cd /mnt/d";
 alias 'ls-detail'="ls -C -c -lt --color -s --size";
-alias reload-bash="source .bash_profile"
+alias reload-bash="source ~/.bash_profile";
 
-# My function to compile C and C++ easily
+# Function to compile C and C++ easily
 function compile() {
 
 	for file in $@; do      #looping through all the files passed in as arguments
@@ -68,7 +68,7 @@ function comdep() {
             fi
         
         done
-        $compiler ${dependancies[@]} $file -o ${executable};
+        $compiler -O3 ${dependancies[@]} $file -o ${executable};
     done
 }
 
@@ -126,7 +126,7 @@ function run() {
 # SYNTAX : out [-v or -c] [C or CPP file]
 # The order of the arguments doesn't matter and [-v or -c] is optional
 # -v stands for open the created file in vim editor
-# -c stands for open the creadted file in vscode (If it is installed)
+# -c stands for open the created file in vscode (If it is installed)
 # You can provide any number of files
 
 function out() {
@@ -211,39 +211,41 @@ function out() {
 #SYNTAX: mcd dir_name
 function mcd(){
         if [ $# -eq 0 ]; then
-                echo "Too few arguments"
-                return
+                echo "Too few arguments";
+                return;
         fi
-        declare -a list
-        readarray list < <(find -name "$1" -type d)
-        if [ ${#list[@]} -ne 0 ];then
-                echo "Directory name already exists"
-                echo "Do you want to Open the existing directory[Y/N] ?:"
-                read  ans
-                if [ "$ans" == Y -o "$ans" == y ];then
-                        cd "$1"
-                        return
+        #declare -a list;
+        #readarray list < <(find -name "$1" -type d);
+        if [ -d $1 ];then
+                echo "Directory name already exists";
+                read -p "Do you want to Open the existing directory[Y/N] ?:" ans;
+                if [ $ans == "Y" -o $ans == "y" ]; then
+                        cd "$1";
+                        return;
+                fi
+                if [ $ans ==  "N" -o $ans == "n" ]; then
+                        return;
                 fi
         fi
-        mkdir "$1"
-        echo "Directory created"
-        cd "$1"
+        mkdir "$1";
+        echo "Directory created";
+        cd "$1";
 }
 #Function to access tldr help pages
 #Just to make tldr command more self-explanative and intuitive
 #
 function Help(){
          if [ $# -eq 0 ]; then
-                echo "Too few arguments"
-                return
+                echo "Too few arguments";
+                return;
         fi
         if [ $# -gt 1 ]; then
-                echo "Too many arguments"
-                echo "Give one command at a time"
-                return
+                echo "Too many arguments";
+                echo "Give one command at a time";
+                return;
         fi
-        echo -e "\n------------ "$1"--------------\n"
-        tldr "$1"
+        echo -e "\n------------ "$1"--------------\n";
+        tldr "$1";
 }
 
 # Case-insensitive globbing (used in pathname expansion)
