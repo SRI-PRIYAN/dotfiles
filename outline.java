@@ -1,7 +1,4 @@
-import java.util.*;
-import java.lang.*;
-
-public class JavaSucks {
+public class Temp {
     public static void main(String[] args) {
         
     }
