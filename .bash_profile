@@ -59,7 +59,6 @@ function comdep() {
             
             if [[ ${headers#*.} == "h" ]]; then
                 local dep_file=${headers%.*}"."${extension};
-                local temp="^${dep_file}$"
                 if [[ ${dependancies[*]} =~ ${dep_file} ]]; then
                     continue;
                 fi
@@ -68,7 +67,7 @@ function comdep() {
             fi
         
         done
-        $compiler -O3 ${dependancies[@]} $file -o ${executable};
+        $compiler -O2 ${dependancies[@]} $file -o ${executable};
     done
 }
 
@@ -97,11 +96,7 @@ function class() {
 
         sed -i "s/x/${class_name}/g" $header;
         sed -i "s/x/${class_name}/g" $source;
-
-    
     done
-
-
 }
 
 # My function to run C and C++ executable files easily
@@ -122,7 +117,7 @@ function run() {
 }
 
 
-# My function to give outline to C and C++ files
+# Function to give outline to C and C++ files
 # SYNTAX : out [-v or -c] [C or CPP file]
 # The order of the arguments doesn't matter and [-v or -c] is optional
 # -v stands for open the created file in vim editor
@@ -130,7 +125,6 @@ function run() {
 # You can provide any number of files
 
 function out() {
-    
     if [ $# -eq 0 ]; then
         echo "Too Few Arguments";
         return;
@@ -203,8 +197,8 @@ function out() {
             fi
         fi
     done
-
 }
+
 #Function to create Directory and enter the directory
 #Combining mkdir+cd commands
 #Inspired from Missing Semester classes MIT
