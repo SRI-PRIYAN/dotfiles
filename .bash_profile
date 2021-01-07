@@ -13,7 +13,7 @@ unset file;
 alias winhome="cd /mnt/c/users/ELCOT";
 alias edu="cd /mnt/d";
 alias 'ls-detail'="ls -C -c -lt --color -s --size";
-alias reload-bash="source ~/.bash_profile";
+alias refresh="source ~/.bashrc";
 
 # Function to compile C and C++ easily
 function compile() {
@@ -71,6 +71,22 @@ function comdep() {
     done
 }
 
+function codeforces() {
+    if [[ $# -eq 0 ]]; then
+        echo "Folder Name Required!";
+        return;
+    fi
+
+    for folder in $@; do
+        mkdir $folder;
+        out -cp $folder/A.cpp;
+        out -cp $folder/B.cpp;
+        out -cp $folder/C.cpp;
+        touch $folder/test.txt;
+    done
+}
+
+
 # Creates classes for C++ files (Both header as well as cpp files)
 function class() {
     if [[ $# -eq 0 ]]; then
@@ -79,8 +95,8 @@ function class() {
     fi
 
     for class_name in $@; do
-        local header="${class_name}.h"
-        local source="${class_name}.cpp"
+        local header="${class_name}.h";
+        local source="${class_name}.cpp";
 
         if [[ -e $header || -e $source ]]; then
             read -p "$header or $source already exists. Do You wanna replace them? [Y/N]" permisson;
@@ -168,7 +184,18 @@ function out() {
     for file in ${files[@]}; do
         local class=${file%.*};     #Only for java files
         local extension=${file#*.};
-        local source="outline."$extension;
+        
+        if [[ $flag == "-cp" ]]; then
+            local source="cp_outline."${extension};
+        else
+            local source="outline."${extension};
+        fi
+
+        if [[ ! -e $source ]]; then
+            echo "Create a ${source} file in the Home Directory for creating ${file}";
+            continue;
+        fi
+
         if [ -e $file ]; then
             echo "$file Already exists";
             read -p "Do You Wanna replace its contents?[Y/N] : " permission;
@@ -192,7 +219,7 @@ function out() {
                 vim $file;
             elif [ $flag == "-c" ]; then
                 code -r $file;
-            else
+            elif [ $flag != "-cp" ]; then
                 echo "Invalid Flag";
             fi
         fi
