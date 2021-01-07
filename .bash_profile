@@ -191,7 +191,7 @@ function out() {
             local source="outline."${extension};
         fi
 
-        if [[ ! -e $source ]]; then
+        if [[ ! -e ~/${source} ]]; then
             echo "Create a ${source} file in the Home Directory for creating ${file}";
             continue;
         fi
