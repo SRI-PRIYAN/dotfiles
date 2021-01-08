@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include <algorithms>
+#include <algorithm>
 #include <queue>
 #include <stack>
 #include <unordered_map>
