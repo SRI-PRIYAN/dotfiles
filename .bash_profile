@@ -73,16 +73,12 @@ function comdep() {
 
 function codeforces() {
     if [[ $# -eq 0 ]]; then
-        echo "Folder Name Required!";
+        echo "Contest ID required!";
         return;
     fi
 
-    for folder in $@; do
-        mkdir $folder;
-        out -cp $folder/A.cpp;
-        out -cp $folder/B.cpp;
-        out -cp $folder/C.cpp;
-        touch $folder/test.txt;
+    for contest_id in $@; do
+        python3 ~/webscraper.py . $contest_id;
     done
 }
 
