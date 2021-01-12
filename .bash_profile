@@ -71,6 +71,10 @@ function comdep() {
     done
 }
 
+# creates a dir for the specified codeforces contests and each of which containing subdir for each problem
+# in that contest which in turn contains the sample testcases, output files for the same and the template
+# file if cp_outline.cpp exists in the home directory.
+# syntax : codeforces <contest_id1> <contest_id2> and so on
 function codeforces() {
     if [[ $# -eq 0 ]]; then
         echo "Contest ID required!";
@@ -78,10 +82,76 @@ function codeforces() {
     fi
 
     for contest_id in $@; do
-        python3 ~/webscraper.py . $contest_id;
+        python3 ~/webscraper.py . ${contest_id};
     done
 }
 
+# A utility function which does all the hard work for the grade function.
+function util_grade() {
+    local success="true";
+    for src in $@; do
+        echo -e "\n----------Grading ${src}----------\n";
+        echo -e "\ncompiling ${src}...\n";
+
+        compile ${src};
+        if [[ $? -ne 0 ]]; then
+            success="false";
+            continue;
+        fi
+        
+        local test_cases_failed=0;
+
+        local executable=${src%.*};
+        for input in $(ls input*.txt); do
+            echo "------------------------";
+            echo "Running on ${input} : ";
+            ./${executable} < ${input} > ~/.dumpfile;
+            cat ~/.dumpfile;
+            local output="output"${input#input};
+            echo -e "\nEcpected (${output}) : ";
+            cat $output;
+            echo "------------------------";
+            diff -w ~/.dumpfile ${output} > /dev/null;
+            if [[ $? -eq 0 ]]; then
+                echo "${green}${input} : Ok ${reset}";
+            else
+                echo "${red}${input} : Failed ${reset}";
+                (( test_cases_failed++ ))
+            fi
+        done
+
+        echo "------------------------";
+        if [[ ${test_cases_failed} -eq 0 ]]; then
+            echo -e "\n${green}All TestCases Passed! ${reset}";
+        else
+            echo -e "\n${red}${test_cases_failed} TestCase(s) failed";
+        fi
+
+    done
+
+    if [[ success == "true" ]];then
+        return 0;
+    else
+        return 1;
+    fi
+}
+
+
+# Takes in a 'c' or 'cpp' file as argument.
+# compiles it and runs it against all the input<number>.txt files
+# and checks the output against the corresponding output<number>.txt files
+# and displays the output in less mode so that the user need not scroll up
+# to see the output from the top.
+function grade() {
+    if [[ $# -eq 0 ]]; then
+        echo "source file to be tested required!";
+        return;
+    fi
+    
+    echo "Running on Testcases...";
+    util_grade $@ > ~/.outfile;
+    less -R ~/.outfile;
+}
 
 # Creates classes for C++ files (Both header as well as cpp files)
 function class() {
