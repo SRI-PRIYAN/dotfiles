@@ -12,25 +12,22 @@ def get_number_of_problems(contest):
 
 def create_file(file_name, content):
     with open(file_name, "wt") as f:
-        f.write(content)
+        f.write(f"{content}\n")
 
 def mcd(dir_name):
-    os.mkdir(dir_name)
+    if dir_name not in os.listdir("."):
+        os.mkdir(dir_name)
     os.chdir(dir_name)
 
 def get_contest_dir(contest_id):
     contest_dir = f"contest-{contest_id}"
 
     if os.path.exists(contest_dir):
-        print(f"{contest_dir} already exists. Do you want to create the directory with any other name?[yes/no]")
+        print(f"{contest_dir} already exists. Do you wanna redownload the input and output files?")
+        print("This won't affect any of the already written source code in that dir [yes/no] : ", end="")
         response = input()
-        if response.lower() in ["yes", "y"]:
-            contest_dir = input("Enter the Directory Name : ")
-        else:
+        if response.lower() not in ["yes", "y"]:
             sys.exit(1)
-
-    if os.path.exists(contest_dir):
-        sys.exit("Ah shit! You are supposed to enter the name in which no other directory exists. Terminating Program...")
 
     return contest_dir
 
@@ -52,8 +49,9 @@ def main():
         print(f"Creating a Directoy for Problem-{problem_id}...")
         mcd(problem_id)
 
-        if template_exists:
-            shutil.copy(source, f"{problem_id}.cpp")
+        problem_file = f"{problem_id}.cpp"
+        if template_exists and problem_file not in os.listdir("."):
+            shutil.copy(source, problem_file)
 
         problem = f"{contest}/problem/{problem_id}"
         r = requests.get(problem)
@@ -61,12 +59,12 @@ def main():
         
         cases = soup.find_all("div", class_="input")
         for ind, case in enumerate(cases):
-            content = case.pre.text.lstrip()
+            content = case.pre.text.strip()
             create_file(f"input{ind + 1}.txt", content)
 
         outputs = soup.find_all("div", class_="output")
         for ind, output in enumerate(outputs):
-            content = output.pre.text.lstrip()
+            content = output.pre.text.strip()
             create_file(f"output{ind + 1}.txt", content)
 
         os.chdir("..")

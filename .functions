@@ -71,29 +71,35 @@ function codeforces() {
 
 # A utility function which does all the hard work for the grade function.
 function util_grade() {
-    local success="true";
     for src in $@; do
-        echo -e "\n----------Grading ${src}----------\n";
-        echo -e "\ncompiling ${src}...\n";
-
-        compile ${src};
-        if [[ $? -ne 0 ]]; then
-            success="false";
+        local extension=${src#*.};
+        if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
+            echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
             continue;
         fi
+
+        if [[ ! -e ${src} ]]; then
+            echo -e "\n${red}Bruh! ${src} doesn't exist. Should I write code for you and test it? lol";
+            continue;
+        fi
+
+        echo -e "\n${orange}----------Grading ${src}----------";
+        echo -e "\n${yellow}compiling ${src}...\n";
+
+        compile ${src};
         
         local test_cases_failed=0;
 
         local executable=${src%.*};
         for input in $(ls input*.txt); do
-            echo "------------------------";
-            echo "Running on ${input} : ";
+            echo "${bright_yellow}------------------------";
+            echo "${cyan}Running on ${input} : ";
             ./${executable} < ${input} > ~/.dumpfile;
             cat ~/.dumpfile;
             local output="output"${input#input};
-            echo -e "\nEcpected (${output}) : ";
+            echo -e "\n${cyan}Expected (${output}) : ";
             cat $output;
-            echo "------------------------";
+            echo "${bright_yellow}------------------------";
             diff -w ~/.dumpfile ${output} > /dev/null;
             if [[ $? -eq 0 ]]; then
                 echo "${green}${input} : Ok ${reset}";
@@ -103,20 +109,14 @@ function util_grade() {
             fi
         done
 
-        echo "------------------------";
+        echo "${bright_yellow}------------------------";
         if [[ ${test_cases_failed} -eq 0 ]]; then
-            echo -e "\n${green}All TestCases Passed! ${reset}";
+            echo -e "\n${green}All TestCases Passed!";
         else
-            echo -e "\n${red}${test_cases_failed} TestCase(s) failed";
+            echo -e "\n${red}${test_cases_failed} TestCase(s) Failed!";
         fi
 
     done
-
-    if [[ success == "true" ]];then
-        return 0;
-    else
-        return 1;
-    fi
 }
 
 
@@ -125,14 +125,21 @@ function util_grade() {
 # and checks the output against the corresponding output<number>.txt files
 # and displays the output in less mode so that the user need not scroll up
 # to see the output from the top.
+# Syntax : grade <file1> <file2> and so on
 function grade() {
     if [[ $# -eq 0 ]]; then
         echo "source file to be tested required!";
         return;
     fi
+
+    # displays the most recently graded output
+    if [[ $1 == "--prev" ]]; then
+        less -R ~/.outfile;
+        return;
+    fi
     
-    echo "Running on Testcases...";
     util_grade $@ > ~/.outfile;
+
     less -R ~/.outfile;
 }
 

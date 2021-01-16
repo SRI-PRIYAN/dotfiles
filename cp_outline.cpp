@@ -3,6 +3,8 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <numeric>
+#include <limits>
 #include <queue>
 #include <stack>
 #include <unordered_map>
