@@ -1,23 +1,50 @@
-# dotfiles
+# Dotfiles
 
-Configure Bash using these dotfiles.
+## Preview
 
-Follow these steps to setup the files :
+[![terminal.png](https://i.postimg.cc/dtkv6BJS/terminal.png)](https://postimg.cc/zVr9XTbn)
 
-  1. Goto the home directory of your linux OS (This can be done by typing "cd" in the terminal).
-  2. Copy all the files in this repository to your home directory.
-  3. Then execute this command in the terminal "source ~/.bashrc"
-  4. BOOM! Thats all you have to do.
+## Description
 
-> See .functions file for the available functions.
-> one of them is, "codeforces" which takes in the contest id and creates directories for each problem containing template code and sample input and output files from the website.
-> Another one is "grade" function which compiles the given 'c' or 'cpp' file, runs it against the input files and checks if it matches the expected output and gives the verdict.
+* Configure Bash with these dotfiles.
 
-Dependancy modules for python :
+* Increase your workflow with the help of automated functions and aliases.
 
-  1. BeautifulSoup -----> pip3 install beautifulsoup4
-  2. Requests      -----> pip3 install requests
-  3. lxml          -----> pip3 install lxml
+## Requirements
 
-NOTE:
-  All the file names should be preserved during copying.
+* You must have the bash shell running on your machine. If you have Linux or Mac, it comes inbuilt. If you are running windows, you probably want to use WSL(Windows Subsystem for Linux).
+
+* Install 'python3' and its package manager 'pip' on the bash shell if you haven't already.
+
+  ```bash
+    sudo apt-get install python3
+    sudo apt-get install python3-pip
+  ```
+
+* And some additional light-weight python modules.
+
+  ```bash
+    pip3 install beautifulsoup4
+    pip3 install requests
+    pip3 install lxml
+  ```
+
+## Installation
+
+* Install git if you haven't already.
+
+  ```bash
+    sudo apt-get install git
+  ```
+
+* Clone this repository to your local machine anywhere you want. The bootstrap script will pull in the latest version and copy the files into your home directory.
+
+  ```bash
+    git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles && source bootstrap.sh
+  ```
+
+* To update, `cd` into your local `dotfiles` repository and then :
+
+  ```bash
+    source bootstrap.sh
+  ```
