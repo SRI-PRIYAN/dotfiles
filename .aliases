@@ -4,3 +4,4 @@ alias winhome="cd /mnt/c/users/ELCOT";
 alias edu="cd /mnt/d";
 alias 'ls-detail'="ls -C -c -lt --color -s --size";
 alias refresh="source ~/.bashrc";
+alias Desktop="cd /mnt/c/users/ELCOT/Desktop/"
