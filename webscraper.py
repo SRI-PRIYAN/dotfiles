@@ -46,7 +46,7 @@ def main():
     template_exists = os.path.exists(source)
     for i in range(n):
         problem_id = chr(ord('A') + i)
-        print(f"Creating a Directoy for Problem-{problem_id}...")
+        print(f"Creating a Directory for Problem-{problem_id}...")
         mcd(problem_id)
 
         problem_file = f"{problem_id}.cpp"
