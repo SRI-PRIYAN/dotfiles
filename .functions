@@ -10,7 +10,7 @@ function compile() {
 				gcc -o $executable $file;
 				;;
 			cpp)
-				g++ -o $executable $file;
+				g++ -o $executable $file -std=c++17;
 				;;
 			*)
 				echo "INVALID EXTENSION";
@@ -19,7 +19,8 @@ function compile() {
 	done
 }
 
-# compiles all the dependancies (i.e., all the c and cpp files associated with the local header files included)
+# compiles all the dependancies
+# (i.e., all the c and cpp files associated with the local header files included)
 function comdep() {
     regex="^\"(.*)\"$";
     for file in $@; do
@@ -54,6 +55,22 @@ function comdep() {
     done
 }
 
+# Displaying only the files
+function files() {
+    readarray -t files <<< $(ls -a);
+    for file in "${files[@]}"; do
+        [ -f "$file" ] && ls "$file";
+    done | column -x;
+}
+
+# Displaying only the directories
+function dirs() {
+    readarray -t files <<< $(ls);
+    for dir in "${files[@]}"; do
+        [ -d "$dir" ] && ls -d "$dir";
+    done | column -x;
+}
+
 # creates a dir for the specified codeforces contests and each of which containing subdir for each problem
 # in that contest which in turn contains the sample testcases, output files for the same and the template
 # file if cp_outline.cpp exists in the home directory.
@@ -71,52 +88,64 @@ function codeforces() {
 
 # A utility function which does all the hard work for the grade function.
 function util_grade() {
-    for src in $@; do
-        local extension=${src#*.};
-        if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
-            echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
-            continue;
-        fi
+	local src=$1;
+	local extension=${src#*.};
 
-        if [[ ! -e ${src} ]]; then
-            echo -e "\n${red}Bruh! ${src} doesn't exist. Should I write code for you and test it? lol";
-            continue;
-        fi
+	if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
+		echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
+		return;
+	fi
 
-        echo -e "\n${orange}----------Grading ${src}----------";
-        echo -e "\n${yellow}compiling ${src}...\n";
+	if [[ ! -e ${src} ]]; then
+		echo -e "\n${red} ${src} doesn't exist!";
+		return;
+	fi
 
-        compile ${src};
-        
-        local test_cases_failed=0;
+	echo -e "\n${orange}----------Grading ${src}----------";
+	echo -e "\n${yellow}compiling ${src}...\n";
 
-        local executable=${src%.*};
-        for input in $(ls input*.txt); do
-            echo "${bright_yellow}------------------------";
-            echo "${cyan}Running on ${input} : ";
-            ./${executable} < ${input} > ~/.dumpfile;
-            cat ~/.dumpfile;
-            local output="output"${input#input};
-            echo -e "\n${cyan}Expected (${output}) : ";
-            cat $output;
-            echo "${bright_yellow}------------------------";
-            diff -w ~/.dumpfile ${output} > /dev/null;
-            if [[ $? -eq 0 ]]; then
-                echo "${green}${input} : Ok ${reset}";
-            else
-                echo "${red}${input} : Failed ${reset}";
-                (( test_cases_failed++ ))
-            fi
-        done
+	# Compiling the source code.
+	compile ${src};
+	
+	local executable=${src%.*};
+	local accepted="true";
 
-        echo "${bright_yellow}------------------------";
-        if [[ ${test_cases_failed} -eq 0 ]]; then
-            echo -e "\n${green}All TestCases Passed!";
-        else
-            echo -e "\n${red}${test_cases_failed} TestCase(s) Failed!";
-        fi
+	for input in $(ls input*.txt); do
+		echo "${bright_yellow}------------------------";
+		echo "${cyan}Running on ${input} : ";
 
-    done
+		# Executing code against input and storing the output.
+		./${executable} < ${input} > ~/.dumpfile;
+
+		cat ~/.dumpfile;
+
+		# Corresponding output file name
+		local output="output"${input#input};
+
+		echo -e "\n${cyan}Expected (${output}) : ";
+		cat $output;
+		echo "${bright_yellow}------------------------";
+		
+		# Checking against desired output
+		diff -w ~/.dumpfile ${output} > ~/.diff_file;
+		
+		if [[ $? -eq 0 ]]; then
+			echo "${green}${input} : Ok ${reset}";
+		else
+			echo "${red}${input} : Failed ${reset}";
+			accepted="false";
+			break;
+		fi
+	done
+
+	echo "${bright_yellow}------------------------${reset}";
+	
+	if [[ ${accepted} == "true" ]]; then
+		echo -e "\n${green}All TestCases Passed!${reset}";
+	else
+		echo -e "\n----------------Skipping Further Test Cases------------------\n";
+		echo -e "\t ${cyan}Use \"grade --diff\" to view the difference!${reset}";
+	fi
 }
 
 
@@ -125,22 +154,25 @@ function util_grade() {
 # and checks the output against the corresponding output<number>.txt files
 # and displays the output in less mode so that the user need not scroll up
 # to see the output from the top.
-# Syntax : grade <file1> <file2> and so on
+# Terminates at the testcase where the code fails and allows
+# to use 'grade --diff' to see the difference between the program's
+# output and the expected output
+# Syntax : grade <source_code>
 function grade() {
-    if [[ $# -eq 0 ]]; then
-        echo "source file to be tested required!";
-        return;
-    fi
+	if [[ $# -ne 1 ]]; then
+		echo "usage: grade <source_code>";
+		return;
+	fi
 
     # displays the most recently graded output
     if [[ $1 == "--prev" ]]; then
         less -R ~/.outfile;
-        return;
-    fi
-    
-    util_grade $@ > ~/.outfile;
-
-    less -R ~/.outfile;
+	elif [[ $1 == "--diff" ]]; then
+		less -R ~/.diff_file;
+	else
+	    util_grade $1 > ~/.outfile;
+		less -R ~/.outfile;
+	fi
 }
 
 # Creates classes for C++ files (Both header as well as cpp files)
@@ -169,21 +201,6 @@ function class() {
         sed -i "s/x/${class_name}/g" $header;
         sed -i "s/x/${class_name}/g" $source;
     done
-}
-
-# function to run C and C++ executable files easily
-function run() {
-    for file in $@; do
-		local executable=${file%.*};
-		if  [ -e $executable ]; then    #checking if the file was already compiled
-			echo -e "\n----- Running : ${file} -----\n";
-			./$executable;
-		else    # if it's not compiled already, the compile it and then run the executable
-			echo -e "\n----- Running : ${file} -----\n";
-			compile $file;      # compile function is declared above
-			./$executable;
-		fi
-	done
 }
 
 
@@ -281,44 +298,19 @@ function out() {
 
 #Function to create Directory and enter the directory
 #Combining mkdir+cd commands
-#Inspired from Missing Semester classes MIT
-#SYNTAX: mcd dir_name
+#Syntax: mcd dir_name
 function mcd(){
-        if [ $# -eq 0 ]; then
-                echo "Too few arguments";
-                return;
-        fi
-        #declare -a list;
-        #readarray list < <(find -name "$1" -type d);
-        if [ -d $1 ];then
-                echo "Directory name already exists";
-                read -p "Do you want to Open the existing directory[Y/N] ?:" ans;
-                if [ $ans == "Y" -o $ans == "y" ]; then
-                        cd "$1";
-                        return;
-                fi
-                if [ $ans ==  "N" -o $ans == "n" ]; then
-                        return;
-                fi
-        fi
-        mkdir "$1";
-        echo "Directory created";
-        cd "$1";
-}
+	if [[ $# -ne 1 ]]; then
+		echo "usage: mcd <dir_name>";
+		return;
+	fi
 
-#Function to access tldr help pages
-#Just to make tldr command more self-explanative and intuitive
-#
-function Help(){
-         if [ $# -eq 0 ]; then
-                echo "Too few arguments";
-                return;
-        fi
-        if [ $# -gt 1 ]; then
-                echo "Too many arguments";
-                echo "Give one command at a time";
-                return;
-        fi
-        echo -e "\n------------ "$1"--------------\n";
-        tldr "$1";
+	if [[ -d $1 ]]; then
+		echo "Opening Existing Directory!";
+	else
+		mkdir "$1";
+		echo "Directory created";
+	fi
+
+	cd $1;
 }

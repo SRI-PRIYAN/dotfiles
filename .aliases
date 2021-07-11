@@ -3,7 +3,9 @@
 alias winhome="cd /mnt/c/users/ELCOT";
 alias edu="cd /mnt/d";
 alias 'ls-detail'="ls -C -c -lt --color -s --size";
-alias refresh="source ~/.bashrc";
-alias Desktop="cd /mnt/c/users/ELCOT/Desktop/";
+alias ref="source ~/.bashrc";
 alias psql="sudo -u postgres psql -p 5432 -h 127.0.0.1";
-alias sizeof="python3 ~/size_calc.py"
+alias sizeof="python3 ~/size_calc.py";
+alias cmd="cmd.exe";
+alias code="echo \"code .\" | cmd";
+alias repos="cd /mnt/d/GitRepositories/";
