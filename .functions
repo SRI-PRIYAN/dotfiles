@@ -2,18 +2,27 @@
 
 # Function to compile C and C++ easily
 function compile() {
+	declare -a flags;
+	local i=0;
+	local pattern="^-";
+	for file in $@; do
+		[[ $file =~ $pattern ]] && flags[$i]=$file && (( i++ ));
+	done
+
 	for file in $@; do      #looping through all the files passed in as arguments
+		[[ $file =~ $pattern ]] && continue;
+
 		local extension=${file#*.};     #storing the extension and executable of the file
 		local executable=${file%.*};
 		case $extension in
 			c)
-				gcc -o $executable $file;
+				gcc ${flags[@]} -o $executable $file;
 				;;
 			cpp)
-				g++ -o $executable $file -std=c++17;
+				g++ ${flags[@]} -o $executable $file -std=c++17;
 				;;
 			*)
-				echo "INVALID EXTENSION";
+				echo "Invalid Extension";
 				;;
 		esac
 	done
