@@ -60,8 +60,26 @@ function comdep() {
             fi
         
         done
-        $compiler -O2 ${dependancies[@]} $file -o ${executable};
+        $compiler ${dependancies[@]} $file -o ${executable};
     done
+}
+
+function javacw() {
+	if [ $# -gt 1 ]; then
+		echo "usage: javacw ClassName.java";
+		return;
+	fi
+
+	echo "javac ${1}" | cmd;
+}
+
+function javaw() {
+	if [ $# -gt 1 ]; then
+		echo "usage: javaw ClassName";
+		return;
+	fi
+
+	echo "java ${1}" | cmd;
 }
 
 # Displaying only the files
