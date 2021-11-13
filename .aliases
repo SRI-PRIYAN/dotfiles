@@ -9,3 +9,4 @@ alias sizeof="python3 ~/size_calc.py";
 alias cmd="cmd.exe";
 alias code="echo \"code .\" | cmd";
 alias repos="cd /mnt/d/GitRepositories/";
+alias cserver="ssh s2019103065@14.139.161.31";
