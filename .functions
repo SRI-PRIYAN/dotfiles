@@ -52,7 +52,7 @@ function comdep() {
             
             if [[ ${headers#*.} == "h" ]]; then
                 local dep_file=${headers%.*}"."${extension};
-                if [[ ${dependancies[*]} =~ ${dep_file} ]]; then
+                if [[ ! -f ${dep_file} || ${dependancies[*]} =~ ${dep_file} ]]; then
                     continue;
                 fi
                 local dependancies[$i]=$dep_file;
@@ -62,6 +62,12 @@ function comdep() {
         done
         $compiler ${dependancies[@]} $file -o ${executable};
     done
+}
+
+function cy() {
+    lex $1".l";
+    yacc -dy $1".y";
+    gcc lex.yy.c y.tab.c -o $1;
 }
 
 function javacw() {
@@ -263,6 +269,14 @@ function out() {
                 (( i++ ));
                 ;;
             *.java)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *.l)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *.y)
                 local files[$i]=$temp;
                 (( i++ ));
                 ;;
