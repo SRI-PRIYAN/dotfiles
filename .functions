@@ -9,17 +9,19 @@ function compile() {
 		[[ $file =~ $pattern ]] && flags[$i]=$file && (( i++ ));
 	done
 
-	for file in $@; do      #looping through all the files passed in as arguments
+    #looping through all the files passed in as arguments
+	for file in $@; do
 		[[ $file =~ $pattern ]] && continue;
-
-		local extension=${file#*.};     #storing the extension and executable of the file
+        
+        #storing the extension and executable of the file
+		local extension=${file#*.};
 		local executable=${file%.*};
 		case $extension in
 			c)
 				gcc ${flags[@]} -o $executable $file;
 				;;
 			cpp)
-				g++ ${flags[@]} -o $executable $file -std=c++17;
+				g++ ${flags[@]} -o $executable $file -std=c++20;
 				;;
 			*)
 				echo "Invalid Extension";
