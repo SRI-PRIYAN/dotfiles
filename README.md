@@ -40,7 +40,7 @@
 * Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
 
   ```bash
-    git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles && source bootstrap.sh
+    cd ~ && git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles && source bootstrap.sh
   ```
 
 * To update, `cd` into your local `dotfiles` repository and then :
