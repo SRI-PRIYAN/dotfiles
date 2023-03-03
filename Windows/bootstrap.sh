@@ -2,7 +2,7 @@
 
 git pull origin master;
 
-function install() {
+function install_dotfiles() {
     rsync --exclude "bootstrap.sh" \
             --exclude "*.json" \
             -avh --no-perms . ~;
@@ -11,12 +11,12 @@ function install() {
 }
 
 if [[ $1 == "--force" || $1 == "-f" ]]; then
-    install;
+    install_dotfiles;
 else
     read -p "This might overwrite the already existing files in the home directory. Are you sure? [y/n] : ";
 
     if [[ ${REPLY} == "y" || ${REPLY} == "Y" ]]; then
-        install;
+        install_dotfiles;
     fi
 fi
-unset install;
+unset install_dotfiles;
