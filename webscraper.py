@@ -59,7 +59,11 @@ def main():
         
         cases = soup.find_all("div", class_="input")
         for ind, case in enumerate(cases):
-            content = case.pre.text.strip()
+            divs = case.pre.find_all("div")
+            if not divs:
+                content = case.pre.text.strip()
+            else:
+                content = "".join([f"{div.text}\n" for div in divs]).strip()
             create_file(f"input{ind + 1}.txt", content)
 
         outputs = soup.find_all("div", class_="output")
@@ -71,7 +75,6 @@ def main():
 
     if not template_exists:
         print("\nCreate a cp_outline.cpp file in the home folder to create the template files for each problem\n")
-
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@
     sudo apt-get install git
   ```
 
-* Clone this repository to your local machine anywhere you want. The bootstrap script will pull in the latest version and copy the files into your home directory.
+* Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
 
   ```bash
     git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles && source bootstrap.sh

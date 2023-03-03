@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
 
-alias winhome="cd /mnt/c/users/ELCOT";
-alias edu="cd /mnt/d";
-alias 'ls-detail'="ls -C -c -lt --color -s --size";
-alias ref="source ~/.bashrc";
-alias psql="sudo -u postgres psql -p 5432 -h 127.0.0.1";
+alias ref="source ~/.zshrc";
 alias sizeof="python3 ~/size_calc.py";
-alias cmd="cmd.exe";
-alias code="echo \"code .\" | cmd";
-alias repos="cd /mnt/d/GitRepositories/";
-alias cserver="ssh s2019103065@14.139.161.31";
