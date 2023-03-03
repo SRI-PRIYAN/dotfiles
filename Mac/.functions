@@ -66,22 +66,6 @@ function comdep() {
     done
 }
 
-# Displaying only the files
-function files() {
-    readarray -t files <<< $(ls -a);
-    for file in "${files[@]}"; do
-        [ -f "$file" ] && ls "$file";
-    done | column -x;
-}
-
-# Displaying only the directories
-function dirs() {
-    readarray -t files <<< $(ls);
-    for dir in "${files[@]}"; do
-        [ -d "$dir" ] && ls -d "$dir";
-    done | column -x;
-}
-
 # creates a dir for the specified codeforces contests and each of which containing subdir for each problem
 # in that contest which in turn contains the sample testcases, output files for the same and the template
 # file if cp_outline.cpp exists in the home directory.
