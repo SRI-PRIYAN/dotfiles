@@ -3,16 +3,8 @@
 git pull origin master;
 
 function install() {
-    rsync --exclude ".git/" \
-            --exclude "README.md" \
-            --exclude "bootstrap.sh" \
-            --exclude "*.c" \
-            --exclude "*.cpp" \
-            --exclude "*.java" \
-            --exclude "*.py" \
+    rsync --exclude "bootstrap.sh" \
             --exclude "*.json" \
-            --exclude "*.h" \
-            --exclude "*.hpp" \
             -avh --no-perms . ~;
     
     source ~/.bashrc;

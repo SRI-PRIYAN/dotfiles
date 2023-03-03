@@ -1,0 +1,327 @@
+#!/usr/bin/env zsh
+
+# Function to compile C and C++ easily
+function compile() {
+	declare -a flags;
+	local i=0;
+	local pattern="^-";
+	for file in $@; do
+		[[ $file =~ $pattern ]] && flags[$i]=$file && (( i++ ));
+	done
+
+    #looping through all the files passed in as arguments
+	for file in $@; do
+		[[ $file =~ $pattern ]] && continue;
+        
+        #storing the extension and executable of the file
+		local extension=${file#*.};
+		local executable=${file%.*};
+		case $extension in
+			c)
+				gcc ${flags[@]} -o $executable $file;
+				;;
+			cpp)
+				g++ ${flags[@]} -o $executable $file -std=c++20;
+				;;
+			*)
+				echo "Invalid Extension";
+				;;
+		esac
+	done
+}
+
+# compiles all the dependancies
+# (i.e., all the c and cpp files associated with the local header files included)
+function comdep() {
+    regex="^\"(.*)\"$";
+    for file in $@; do
+        local extension=${file#*.};
+        
+        if [[ $extension == "c" ]]; then
+            local compiler="gcc";
+        elif [[ $extension == "cpp" ]]; then
+            local compiler="g++";
+        else
+            echo "Invalid File";
+            return;
+        fi
+        
+        local executable=${file%.*};
+        local i=0;
+        local temp=( $(grep "#include \"*\"" $file | cut -f2 -d " ") );
+        for line in ${temp[@]}; do
+            [[ $line =~ $regex ]] && headers=${BASH_REMATCH[1]};
+            
+            if [[ ${headers#*.} == "h" ]]; then
+                local dep_file=${headers%.*}"."${extension};
+                if [[ ! -f ${dep_file} || ${dependancies[*]} =~ ${dep_file} ]]; then
+                    continue;
+                fi
+                local dependancies[$i]=$dep_file;
+                (( i++ ));
+            fi
+        
+        done
+        $compiler ${dependancies[@]} $file -o ${executable};
+    done
+}
+
+# Displaying only the files
+function files() {
+    readarray -t files <<< $(ls -a);
+    for file in "${files[@]}"; do
+        [ -f "$file" ] && ls "$file";
+    done | column -x;
+}
+
+# Displaying only the directories
+function dirs() {
+    readarray -t files <<< $(ls);
+    for dir in "${files[@]}"; do
+        [ -d "$dir" ] && ls -d "$dir";
+    done | column -x;
+}
+
+# creates a dir for the specified codeforces contests and each of which containing subdir for each problem
+# in that contest which in turn contains the sample testcases, output files for the same and the template
+# file if cp_outline.cpp exists in the home directory.
+# syntax : codeforces <contest_id1> <contest_id2> and so on
+function codeforces() {
+    if [[ $# -eq 0 ]]; then
+        echo "Contest ID required!";
+        return;
+    fi
+
+    for contest_id in $@; do
+        python3 ~/dotfiles/webscraper.py . ${contest_id};
+    done
+}
+
+# A utility function which does all the hard work for the grade function.
+function util_grade() {
+	local src=$1;
+	local extension=${src#*.};
+
+	if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
+		echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
+		return;
+	fi
+
+	if [[ ! -e ${src} ]]; then
+		echo -e "\n${red} ${src} doesn't exist!";
+		return;
+	fi
+
+	echo -e "\n${orange}----------Grading ${src}----------";
+	echo -e "\n${yellow}compiling ${src}...\n";
+
+	# Compiling the source code.
+	compile ${src};
+	
+	local executable=${src%.*};
+	local accepted="true";
+
+	for input in $(ls input*.txt); do
+		echo "${bright_yellow}------------------------";
+		echo "${cyan}Running on ${input} : ";
+
+		# Executing code against input and storing the output.
+		./${executable} < ${input} > ~/.dumpfile;
+
+		cat ~/.dumpfile;
+
+		# Corresponding output file name
+		local output="output"${input#input};
+
+		echo -e "\n${cyan}Expected (${output}) : ";
+		cat $output;
+		echo "${bright_yellow}------------------------";
+		
+		# Checking against desired output
+		diff -w ~/.dumpfile ${output} > ~/.diff_file;
+		
+		if [[ $? -eq 0 ]]; then
+			echo "${green}${input} : Ok ${reset}";
+		else
+			echo "${red}${input} : Failed ${reset}";
+			accepted="false";
+			break;
+		fi
+	done
+
+	echo "${bright_yellow}------------------------${reset}";
+	
+	if [[ ${accepted} == "true" ]]; then
+		echo -e "\n${green}All TestCases Passed!${reset}";
+	else
+		echo -e "\n----------------Skipping Further Test Cases------------------\n";
+		echo -e "\t ${cyan}Use \"grade --diff\" to view the difference!${reset}";
+	fi
+}
+
+
+# Takes in a 'c' or 'cpp' file as argument.
+# compiles it and runs it against all the input<number>.txt files
+# and checks the output against the corresponding output<number>.txt files
+# and displays the output in less mode so that the user need not scroll up
+# to see the output from the top.
+# Terminates at the testcase where the code fails and allows
+# to use 'grade --diff' to see the difference between the program's
+# output and the expected output
+# Syntax : grade <source_code>
+function grade() {
+	if [[ $# -ne 1 ]]; then
+		echo "usage: grade <source_code>";
+		return;
+	fi
+
+    # displays the most recently graded output
+    if [[ $1 == "--prev" ]]; then
+        less -R ~/.outfile;
+	elif [[ $1 == "--diff" ]]; then
+		less -R ~/.diff_file;
+	else
+	    util_grade $1 > ~/.outfile;
+		less -R ~/.outfile;
+	fi
+}
+
+# Creates classes for C++ files (Both header as well as cpp files)
+function class() {
+    if [[ $# -eq 0 ]]; then
+        echo "Class Name Required";
+        return;
+    fi
+
+    for class_name in $@; do
+        local header="${class_name}.h";
+        local source="${class_name}.cpp";
+
+        if [[ -e $header || -e $source ]]; then
+            read -p "$header or $source already exists. Do You wanna replace them? [Y/N]" permisson;
+        fi
+
+        if [[ $permisson == "n" || $permisson == "N" ]]; then
+            unset permisson;
+            continue;
+        fi
+
+        cp ~/dotfiles/class.h $header;
+        cp ~/dotfiles/class.cpp $source;
+
+        sed -i "s/x/${class_name}/g" $header;
+        sed -i "s/x/${class_name}/g" $source;
+    done
+}
+
+
+# Function to give outline to C and C++ files
+# SYNTAX : out [-v or -c or -cp] [C or CPP file]
+# The order of the arguments doesn't matter and [-v or -c] is optional
+# -v stands for open the created file in vim editor
+# -c stands for open the created file in vscode (If it is installed)
+# You can provide any number of files
+function out() {
+    if [ $# -eq 0 ]; then
+        echo "Too Few Arguments";
+        return;
+    fi
+
+    local i=0;
+
+    for temp in $@; do
+        case $temp in
+            -*)
+                local flag=$temp;
+                ;;
+            *.c)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *.cpp)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *.py)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *.java)
+                local files[$i]=$temp;
+                (( i++ ));
+                ;;
+            *)
+                echo "Invalid Argument";
+                return;
+                ;;
+        esac
+    done
+
+    if [ ${#files[@]} -eq 0 ]; then
+        echo "File Name Required";
+        return;
+    fi
+
+    for file in ${files[@]}; do
+        local class=${file%.*};     #Only for java files
+        local extension=${file#*.};
+        
+        if [[ $flag == "-cp" ]]; then
+            local source="cp_outline."${extension};
+        else
+            local source="outline."${extension};
+        fi
+
+        if [[ ! -e ~/dotfiles/${source} ]]; then
+            echo "Create a ${source} file in ~/dotfiles for creating ${file}";
+            continue;
+        fi
+
+        if [ -e $file ]; then
+            echo "$file Already exists";
+            read -p "Do You Wanna replace its contents?[Y/N] : " permission;
+
+            if [ $permission == n -o $permission == N ]; then
+                continue;
+            fi
+        fi
+        touch $file;
+
+        # For java files we need to change the class name
+        if [ $extension == "java" ]; then
+            sed -i "s/class .*/class ${class} {/" ~/dotfiles/$source;
+        fi
+
+
+        cp ~/dotfiles/$source $file;
+
+        if [ ! -z ${flag+x} ]; then
+            if [ $flag == "-v" ]; then
+                vim $file;
+            elif [ $flag == "-c" ]; then
+                code -r $file;
+            elif [ $flag != "-cp" ]; then
+                echo "Invalid Flag";
+            fi
+        fi
+    done
+}
+
+#Function to create Directory and enter the directory
+#Combining mkdir+cd commands
+#Syntax: mcd dir_name
+function mcd(){
+	if [[ $# -ne 1 ]]; then
+		echo "usage: mcd <dir_name>";
+		return;
+	fi
+
+	if [[ -d $1 ]]; then
+		echo "Opening Existing Directory!";
+	else
+		mkdir "$1";
+		echo "Directory created";
+	fi
+
+	cd $1;
+}

@@ -8,7 +8,7 @@
 
 * Configure Bash with these dotfiles.
 
-* Increase your workflow with the help of automated functions and aliases.
+* Improve your workflow with the help of automated functions and aliases.
 
 ## Requirements
 
@@ -29,24 +29,26 @@
     pip3 install lxml
   ```
 
-## Installation
-
 * Install git if you haven't already.
 
   ```bash
     sudo apt-get install git
   ```
 
+## Windows Installation
+
 * Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
 
   ```bash
-    cd ~ && git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles && source bootstrap.sh
+    cd ~ && git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles/Windows && source bootstrap.sh
   ```
 
-* To update, `cd` into your local `dotfiles` repository and then :
+## Mac Installation
+
+* Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
 
   ```bash
-    source bootstrap.sh
+    cd ~ && git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles/Mac && source bootstrap.sh
   ```
 
 ## Functions

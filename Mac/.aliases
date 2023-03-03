@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+alias ref="source ~/.zshrc";
+alias conf="vim ~/.zshrc"
+alias sizeof="python3 ~/dotfiles/size_calc.py";

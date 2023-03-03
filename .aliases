@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-alias ref="source ~/.zshrc";
-alias sizeof="python3 ~/size_calc.py";
