@@ -42,7 +42,7 @@ def main():
 
     n = get_number_of_problems(contest)
 
-    source = os.path.expanduser("~/cp_outline.cpp")
+    source = os.path.expanduser("~/dotfiles/cp_outline.cpp")
     template_exists = os.path.exists(source)
     for i in range(n):
         problem_id = chr(ord('A') + i)
