@@ -6,15 +6,16 @@ function install() {
     rsync --exclude "bootstrap.sh" \
             -avh --no-perms . ~;
     
-    source ~/.bashrc;
+    source ~/.zshrc;
 }
 
 if [[ $1 == "--force" || $1 == "-f" ]]; then
     install;
 else
-    read -p "This might overwrite the already existing files in the home directory. Are you sure? [y/n] : ";
+	echo -n "This might overwrite the already existing files in the home dir. Are you sure? [y/n]: "
+    read reply;
 
-    if [[ ${REPLY} == "y" || ${REPLY} == "Y" ]]; then
+    if [[ ${reply} == "y" || ${reply} == "Y" ]]; then
         install;
     fi
 fi
