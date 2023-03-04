@@ -182,7 +182,8 @@ function class() {
         local source="${class_name}.cpp";
 
         if [[ -e $header || -e $source ]]; then
-            read -p "$header or $source already exists. Do You wanna replace them? [Y/N]" permisson;
+            echo -n "$header or $source already exists. Do You wanna replace them? [Y/N]: ";
+            read permission;
         fi
 
         if [[ $permisson == "n" || $permisson == "N" ]]; then
@@ -263,7 +264,8 @@ function out() {
 
         if [ -e $file ]; then
             echo "$file Already exists";
-            read -p "Do You Wanna replace its contents?[Y/N] : " permission;
+            echo -n "Do You Wanna replace its contents?[Y/N]: ";
+            read permission;
 
             if [ $permission == n -o $permission == N ]; then
                 continue;
