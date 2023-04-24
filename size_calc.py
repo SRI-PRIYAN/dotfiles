@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 def get_size_of_dir(dirname):
     res = 0
 
@@ -13,10 +14,12 @@ def get_size_of_dir(dirname):
 
     return res
 
+
 def main():
     dirname = sys.argv[1]
     total_size = get_size_of_dir(dirname) / (1024 * 1024)
     print(f"Total Size : {total_size} MB")
+
 
 if __name__ == "__main__":
     main()
