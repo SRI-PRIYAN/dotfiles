@@ -95,17 +95,21 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Colored man pages
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -123,3 +127,8 @@ if [ -f '/Users/sripriyan/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sripr
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sripriyan/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sripriyan/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Tab completion for kubectl
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+
+export PATH="$PATH:/Users/sripriyan/istio-1.17.0/bin"
