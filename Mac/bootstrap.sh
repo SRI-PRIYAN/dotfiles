@@ -4,6 +4,7 @@ git pull origin master;
 
 function install_dotfiles() {
     rsync --exclude "bootstrap.sh" \
+            --exclude "*.json" \
             -avh --no-perms . ~;
     
     source ~/.zshrc;

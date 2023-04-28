@@ -1,0 +1,10 @@
+# /Users/sripriyan/.config/tmuxinator/nvim-config.yml
+
+name: nvim-config
+root: ~/.config/nvim/
+
+windows:
+  - editor:
+      layout: tiled
+      panes:
+        - clear && nvim lua/custom/plugins.lua lua/custom/mappings.lua
