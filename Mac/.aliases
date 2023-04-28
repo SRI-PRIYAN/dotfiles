@@ -2,4 +2,5 @@
 
 alias ref="source ~/.zshrc";
 alias conf="vim ~/.zshrc"
+alias mux="tmuxinator"
 alias sizeof="python3 ~/dotfiles/size_calc.py";
