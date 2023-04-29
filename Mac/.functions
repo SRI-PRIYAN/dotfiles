@@ -2,32 +2,32 @@
 
 # Function to compile C and C++ easily
 function compile() {
-	declare -a flags;
-	local i=1;
-	local pattern="^-";
-	for file in $@; do
-		[[ $file =~ $pattern ]] && flags[$i]=$file && (( i++ ));
-	done
+  declare -a flags;
+  local i=1;
+  local pattern="^-";
+  for file in $@; do
+    [[ $file =~ $pattern ]] && flags[$i]=$file && (( i++ ));
+  done
 
-    #looping through all the files passed in as arguments
-	for file in $@; do
-		[[ $file =~ $pattern ]] && continue;
-        
-        #storing the extension and executable of the file
-		local extension=${file#*.};
-		local executable=${file%.*};
-		case $extension in
-			c)
-				gcc ${flags[@]} -o $executable $file;
-				;;
-			cpp)
-				g++ ${flags[@]} -o $executable $file -std=c++20;
-				;;
-			*)
-				echo "Invalid Extension";
-				;;
-		esac
-	done
+  #looping through all the files passed in as arguments
+  for file in $@; do
+    [[ $file =~ $pattern ]] && continue;
+
+    #storing the extension and executable of the file
+    local extension=${file#*.};
+    local executable=${file%.*};
+    case $extension in
+      c)
+        gcc ${flags[@]} -o $executable $file;
+        ;;
+      cpp)
+        g++ ${flags[@]} -o $executable $file -std=c++20;
+        ;;
+      *)
+        echo "Invalid Extension";
+        ;;
+    esac
+  done
 }
 
 # creates a dir for the specified codeforces contests and each of which containing subdir for each problem
@@ -35,76 +35,76 @@ function compile() {
 # file if cp_outline.cpp exists in the home directory.
 # syntax : codeforces <contest_id1> <contest_id2> and so on
 function codeforces() {
-    if [[ $# -eq 0 ]]; then
-        echo "Contest ID required!";
-        return;
-    fi
+  if [[ $# -eq 0 ]]; then
+    echo "Contest ID required!";
+    return;
+  fi
 
-    for contest_id in $@; do
-        python3 ~/dotfiles/webscraper.py . ${contest_id};
-    done
+  for contest_id in $@; do
+    python3 ~/dotfiles/webscraper.py . ${contest_id};
+  done
 }
 
 # A utility function which does all the hard work for the grade function.
 function util_grade() {
-	local src=$1;
-	local extension=${src#*.};
+  local src=$1;
+  local extension=${src#*.};
 
-	if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
-		echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
-		return;
-	fi
+  if [[ ${extension} != "c" && ${extension} != "cpp" ]]; then
+    echo -e "\n${red}couldn't grade ${src} file, as only [c] and [cpp] files are accepted";
+    return;
+  fi
 
-	if [[ ! -e ${src} ]]; then
-		echo -e "\n${red} ${src} doesn't exist!";
-		return;
-	fi
+  if [[ ! -e ${src} ]]; then
+    echo -e "\n${red} ${src} doesn't exist!";
+    return;
+  fi
 
-	echo -e "\n${orange}----------Grading ${src}----------";
-	echo -e "\n${yellow}compiling ${src}...\n";
+  echo -e "\n${orange}----------Grading ${src}----------";
+  echo -e "\n${yellow}compiling ${src}...\n";
 
-	# Compiling the source code.
-	compile ${src};
-	
-	local executable=${src%.*};
-	local accepted="true";
+  # Compiling the source code.
+  compile ${src};
 
-	for input in $(ls input*.txt); do
-		echo "${bright_yellow}------------------------";
-		echo "${cyan}Running on ${input} : ";
+  local executable=${src%.*};
+  local accepted="true";
 
-		# Executing code against input and storing the output.
-		./${executable} < ${input} > ~/.dumpfile;
+  for input in $(ls input*.txt); do
+    echo "${bright_yellow}------------------------";
+    echo "${cyan}Running on ${input} : ";
 
-		cat ~/.dumpfile;
+    # Executing code against input and storing the output.
+    ./${executable} < ${input} > ~/.dumpfile;
 
-		# Corresponding output file name
-		local output="output"${input#input};
+    cat ~/.dumpfile;
 
-		echo -e "\n${cyan}Expected (${output}) : ";
-		cat $output;
-		echo "${bright_yellow}------------------------";
-		
-		# Checking against desired output
-		diff -w ~/.dumpfile ${output} > ~/.diff_file;
-		
-		if [[ $? -eq 0 ]]; then
-			echo "${green}${input} : Ok ${reset}";
-		else
-			echo "${red}${input} : Failed ${reset}";
-			accepted="false";
-			break;
-		fi
-	done
+    # Corresponding output file name
+    local output="output"${input#input};
 
-	echo "${bright_yellow}------------------------${reset}";
-	
-	if [[ ${accepted} == "true" ]]; then
-		echo -e "\n${green}All TestCases Passed!${reset}";
-	else
-		echo -e "\n----------------Skipping Further Test Cases------------------\n";
-		echo -e "\t ${cyan}Use \"grade --diff\" to view the difference!${reset}";
-	fi
+    echo -e "\n${cyan}Expected (${output}) : ";
+    cat $output;
+    echo "${bright_yellow}------------------------";
+
+    # Checking against desired output
+    diff -w ~/.dumpfile ${output} > ~/.diff_file;
+
+    if [[ $? -eq 0 ]]; then
+      echo "${green}${input} : Ok ${reset}";
+    else
+      echo "${red}${input} : Failed ${reset}";
+      accepted="false";
+      break;
+    fi
+  done
+
+  echo "${bright_yellow}------------------------${reset}";
+
+  if [[ ${accepted} == "true" ]]; then
+    echo -e "\n${green}All TestCases Passed!${reset}";
+  else
+    echo -e "\n----------------Skipping Further Test Cases------------------\n";
+    echo -e "\t ${cyan}Use \"grade --diff\" to view the difference!${reset}";
+  fi
 }
 
 
@@ -118,37 +118,37 @@ function util_grade() {
 # output and the expected output
 # Syntax : grade <source_code>
 function grade() {
-	if [[ $# -ne 1 ]]; then
-		echo "usage: grade <source_code>";
-		return;
-	fi
+  if [[ $# -ne 1 ]]; then
+    echo "usage: grade <source_code>";
+    return;
+  fi
 
-    # displays the most recently graded output
-    if [[ $1 == "--prev" ]]; then
-        less -R ~/.outfile;
-	elif [[ $1 == "--diff" ]]; then
-		less -R ~/.diff_file;
-	else
-	    util_grade $1 > ~/.outfile;
-		less -R ~/.outfile;
-	fi
+  # displays the most recently graded output
+  if [[ $1 == "--prev" ]]; then
+    less -R ~/.outfile;
+  elif [[ $1 == "--diff" ]]; then
+    less -R ~/.diff_file;
+  else
+    util_grade $1 > ~/.outfile;
+    less -R ~/.outfile;
+  fi
 }
 
 #Function to create Directory and enter the directory
 #Combining mkdir+cd commands
 #Syntax: mcd dir_name
 function mcd(){
-	if [[ $# -ne 1 ]]; then
-		echo "usage: mcd <dir_name>";
-		return;
-	fi
+  if [[ $# -ne 1 ]]; then
+    echo "usage: mcd <dir_name>";
+    return;
+  fi
 
-	if [[ -d $1 ]]; then
-		echo "Opening Existing Directory!";
-	else
-		mkdir "$1";
-		echo "Directory created";
-	fi
+  if [[ -d $1 ]]; then
+    echo "Opening Existing Directory!";
+  else
+    mkdir "$1";
+    echo "Directory created";
+  fi
 
-	cd $1;
+  cd $1;
 }

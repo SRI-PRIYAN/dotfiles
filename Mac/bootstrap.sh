@@ -13,7 +13,7 @@ function install_dotfiles() {
 if [[ $1 == "--force" || $1 == "-f" ]]; then
     install_dotfiles;
 else
-	echo -n "This might overwrite the already existing files in the home dir. Are you sure? [y/n]: "
+  echo -n "This might overwrite the already existing files in the home dir. Are you sure? [y/n]: "
     read reply;
 
     if [[ ${reply} == "y" || ${reply} == "Y" ]]; then
