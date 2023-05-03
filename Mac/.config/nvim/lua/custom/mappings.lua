@@ -23,7 +23,7 @@ M.general = {
 
 M.nvimtree = {
   n = {
-    ["<leader>e"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
+    ["<leader>e"] = { "<CMD> NvimTreeToggle <CR>", "toggle nvimtree" },
   },
 }
 
@@ -39,10 +39,16 @@ M.toggleterm = {
 
 M.vim_tmux_navigator = {
   n = {
-    ["<C-h>"] = { "<cmd>TmuxNavigateLeft<CR>", "Window left" },
-    ["<C-j>"] = { "<cmd>TmuxNavigateDown<CR>", "Window down" },
-    ["<C-k>"] = { "<cmd>TmuxNavigateUp<CR>", "Window up" },
-    ["<C-l>"] = { "<cmd>TmuxNavigateRight<CR>", "Window right" },
+    ["<C-h>"] = { "<CMD>TmuxNavigateLeft<CR>", "Window left" },
+    ["<C-j>"] = { "<CMD>TmuxNavigateDown<CR>", "Window down" },
+    ["<C-k>"] = { "<CMD>TmuxNavigateUp<CR>", "Window up" },
+    ["<C-l>"] = { "<CMD>TmuxNavigateRight<CR>", "Window right" },
+  },
+}
+
+M.undotree = {
+  n = {
+    ["<leader>u"] = { "<CMD>UndotreeToggle<CR>", "Toggle Undotree" },
   },
 }
 
