@@ -7,10 +7,12 @@ from bs4 import BeautifulSoup
 
 
 # Takes the url of the codeforces contest
-def get_number_of_problems(contest):
+def get_problem_ids(contest):
     r = requests.get(contest)
     soup = BeautifulSoup(r.text, "lxml")
-    return len(soup.find("table", class_="problems").find_all("tr")) - 1
+    table = soup.find("table", class_="problems")
+    rows = table.find_all('tr')[1:]
+    return [row.find("td").text.strip() for row in rows]
 
 
 def create_file(file_name, content):
@@ -50,12 +52,11 @@ def main():
     print(f"Creating {contest_dir} Directory for contest-{contest_id}...")
     mcd(contest_dir)
 
-    n = get_number_of_problems(contest)
+    problem_ids = get_problem_ids(contest)
 
     source = os.path.expanduser("~/dotfiles/cp_outline.cpp")
     template_exists = os.path.exists(source)
-    for i in range(n):
-        problem_id = chr(ord('A') + i)
+    for problem_id in problem_ids:
         print(f"Creating a Directory for Problem-{problem_id}...")
         mcd(problem_id)
 
