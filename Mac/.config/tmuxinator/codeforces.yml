@@ -1,0 +1,15 @@
+# /Users/sripriyan/.config/tmuxinator/codeforces.yml
+
+name: codeforces
+root: ./
+
+windows:
+  - editor:
+      layout: a8d3,127x31,0,0{83x31,0,0,0,43x31,84,0,1}
+      panes:
+        - nvim:
+            - clear && nvim
+        - terminal:
+            - clear
+  - shell:
+      layout: tiled
