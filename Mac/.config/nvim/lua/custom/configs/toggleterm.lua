@@ -6,7 +6,7 @@ end
 
 toggleterm.setup {
   open_mapping = "<leader>`",
-  insert_mappings = true,
+  insert_mappings = false,
   close_on_exit = true,
   direction = "float",
 }
