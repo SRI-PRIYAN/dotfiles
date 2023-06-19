@@ -2,11 +2,11 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 for file in ~/.{aliases,functions}; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+    [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
 
@@ -87,10 +87,10 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
-  z
-  zsh-autosuggestions
-  zsh-syntax-highlighting
+    git
+    z
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -108,9 +108,9 @@ export MANROFFOPT="-c"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+    export EDITOR='vim'
 else
-  export EDITOR='nvim'
+    export EDITOR='nvim'
 fi
 
 # Compilation flags
@@ -134,3 +134,9 @@ if [ -f '/Users/sripriyan/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 export PATH="$PATH:/Users/sripriyan/istio-1.17.0/bin"
+
+# FZF configuration
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export FZF_DEFAULT_OPTS='--reverse --border --cycle --no-separator --no-scrollbar --info=inline:"  󰳟 " --prompt="  " --pointer=" " --color="pointer:#00fa9a,gutter:#2A293E,bg+:#043e62"'
+

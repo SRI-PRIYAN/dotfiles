@@ -2,6 +2,7 @@ local plugins = {
   --------------------------- Configuring Existing Plugins ---------------------------
   {
     "nvim-telescope/telescope.nvim",
+    lazy = false,
     opts = {
       defaults = {
         prompt_prefix = "   ",
@@ -92,6 +93,26 @@ local plugins = {
     keys = {
       { "<leader>u", "<CMD>UndotreeToggle<CR>", "Toggle Undotree" },
     },
+  },
+
+  {
+    "AckslD/nvim-neoclip.lua",
+    lazy = false,
+    requires = {
+      { "nvim-telescope/telescope.nvim" },
+    },
+    config = function()
+      require("neoclip").setup {
+        keys = {
+          telescope = {
+            n = {
+              replay = "rp",
+            },
+          },
+        },
+      }
+      require("telescope").load_extension "neoclip"
+    end,
   },
 }
 

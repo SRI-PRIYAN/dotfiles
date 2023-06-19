@@ -4,6 +4,13 @@ M.ui = {
   theme = "catppuccin",
   tabufline = {
     lazyload = false,
+    overriden_modules = function()
+      return {
+        buttons = function()
+          return ""
+        end,
+      }
+    end,
   },
 }
 M.mappings = require "custom.mappings"

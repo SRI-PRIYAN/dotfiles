@@ -2,6 +2,6 @@
 
 class x {
 public:
-  x();
+    x();
 
 };

@@ -14,6 +14,10 @@ M.general = {
 
   v = {
     ["<C-y>"] = { '"+y', "yank to the system clipboard" },
+    ["J"] = { ":m '>+1<CR>gv=gv", "Move the visual selection down" },
+    ["K"] = { ":m '<-2<CR>gv=gv", "Move the visual selection up" },
+    ["<"] = { "<gv", "Keep Visual Selection while indenting" },
+    [">"] = { ">gv", "Keep Visual Selection while indenting" },
   },
 
   i = {
@@ -21,9 +25,23 @@ M.general = {
   },
 }
 
+M.telescope = {
+  n = {
+    ["<leader>cb"] = { "<CMD>Telescope neoclip<CR>", "Open Clipboard" },
+  },
+}
+
+M.tabufline = {
+  n = {
+    ["<tab>"] = { "<CMD>bnext<CR>", "Goto next buffer" },
+    ["<S-tab>"] = { "<CMD>bprevious<CR>", "Goto prev buffer" },
+    ["<leader>x"] = { "<CMD>bdelete<CR>", "Close buffer" },
+  },
+}
+
 M.nvimtree = {
   n = {
-    ["<leader>e"] = { "<CMD> NvimTreeToggle <CR>", "toggle nvimtree" },
+    ["<leader>e"] = { "<CMD>NvimTreeToggle<CR>", "toggle nvimtree" },
   },
 }
 
