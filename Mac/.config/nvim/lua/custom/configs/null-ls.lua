@@ -12,6 +12,9 @@ local sources = {
   formatting.stylua,
   formatting.yapf,
   formatting.isort,
+  formatting.gofumpt,
+  formatting.goimports_reviser,
+  formatting.golines,
 }
 
 -- Format on Save

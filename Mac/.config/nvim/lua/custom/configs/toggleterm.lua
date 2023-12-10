@@ -5,8 +5,8 @@ if not status_ok then
 end
 
 toggleterm.setup {
-  open_mapping = "<leader>`",
-  insert_mappings = false,
+  open_mapping = "<C-`>",
+  -- insert_mappings = false,
   close_on_exit = true,
   direction = "float",
 }

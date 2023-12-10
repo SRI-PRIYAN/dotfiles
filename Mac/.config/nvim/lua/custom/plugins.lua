@@ -14,7 +14,7 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
-      ensure_installed = { "lua", "c", "cpp", "java", "python" },
+      ensure_installed = { "lua", "c", "cpp", "java", "python", "go" },
     },
   },
 
@@ -40,10 +40,15 @@ local plugins = {
       ensure_installed = {
         "clangd",
         "pyright",
+        "gopls",
+
         "prettier",
         "stylua",
         "yapf",
         "isort",
+        "gofumpt",
+        "goimports-reviser",
+        "golines",
       },
     },
   },
@@ -64,7 +69,7 @@ local plugins = {
     version = "*",
     cmd = "ToggleTerm",
     keys = {
-      { "<leader>`", "<CMD>ToggleTerm<CR>", desc = "ToggleTerm" },
+      { "<C-`>", "<CMD>ToggleTerm<CR>", desc = "ToggleTerm" },
     },
     config = function()
       require "custom.configs.toggleterm"

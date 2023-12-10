@@ -4,12 +4,8 @@ M.ui = {
   theme = "catppuccin",
   tabufline = {
     lazyload = false,
-    overriden_modules = function()
-      return {
-        buttons = function()
-          return ""
-        end,
-      }
+    overriden_modules = function(modules)
+      modules[4] = ""
     end,
   },
 }
