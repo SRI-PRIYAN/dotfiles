@@ -1,0 +1,73 @@
+{
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.startupEditor": "none",
+  "editor.fontSize": 15,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.lineNumbers": "relative",
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "editor.unicodeHighlight.allowedCharacters": {
+    "𝛄": true
+  },
+  "notebook.output.textLineLimit": 50,
+  "terminal.integrated.fontFamily": "JetBrainsMonoNL Nerd Font",
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindingsNonRecursive": [
+    {
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<Esc>"],
+      "commands": [":nohl"]
+    },
+    {
+      "before": ["<C-y>"],
+      "after": ["\"", "+", "y"]
+    },
+    {
+      "before": ["<Tab>"],
+      "commands": [":bnext"]
+    },
+    {
+      "before": ["<S-Tab>"],
+      "commands": [":bprevious"]
+    },
+    {
+      "before": ["<leader>", "x"],
+      "commands": [":bdelete"]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<"],
+      "after": ["<", "g", "v"]
+    },
+    {
+      "before": [">"],
+      "after": [">", "g", "v"]
+    },
+    {
+      "before": ["<C-y>"],
+      "after": ["\"", "+", "y"]
+    },
+    {
+      "before": ["p"],
+      "after": ["p", "g", "v", "y"]
+    }
+  ],
+  "vim.leader": "<space>",
+  "extensions.experimental.affinity": {
+    "vscodevim.vim": 1
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
