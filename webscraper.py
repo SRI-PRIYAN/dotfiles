@@ -5,10 +5,13 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+}
 
 # Takes the url of the codeforces contest
 def get_problem_ids(contest):
-    r = requests.get(contest)
+    r = requests.get(contest, headers=headers)
     soup = BeautifulSoup(r.text, 'lxml')
     table = soup.find('table', class_='problems')
     rows = table.find_all('tr')[1:]
@@ -65,7 +68,7 @@ def main():
             shutil.copy(source, problem_file)
 
         problem = f'{contest}/problem/{problem_id}'
-        r = requests.get(problem)
+        r = requests.get(problem, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
 
         cases = soup.find_all('div', class_='input')
