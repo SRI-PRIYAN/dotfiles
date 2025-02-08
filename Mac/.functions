@@ -40,8 +40,22 @@ function codeforces() {
         return;
     fi
 
+    if [[ ! -d ~/dotfiles/venv ]]; then
+        read "reply?Python3 Virtual Environment doesn't exist. Do you want to create it? [y/n]: "
+
+        if [[ "${reply}" == "y" || "${reply}" == "Y" ]]; then
+            python3 -m venv ~/dotfiles/venv;
+            source ~/dotfiles/venv/bin/activate;
+            pip3 install -r ~/dotfiles/requirements.txt;
+            deactivate;
+        else
+            echo "Virtual Environment is required to use this functionality!";
+            return;
+        fi
+    fi
+
     for contest_id in $@; do
-        python3 ~/dotfiles/webscraper.py . ${contest_id};
+        ~/dotfiles/venv/bin/python3 ~/dotfiles/webscraper.py . ${contest_id};
     done
 }
 
