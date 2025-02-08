@@ -2,7 +2,7 @@
 
 ## Installation
 
-* Recommended to have oh-my-zsh installed. Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
+* Recommended to have oh-my-zsh and python3 installed. Clone this repository in your home directory. The bootstrap script will pull in the latest version and copy the files into your home directory.
 
   ```sh
     cd ~ && git clone "https://github.com/SRI-PRIYAN/dotfiles.git" && cd dotfiles/Mac && source bootstrap.sh
