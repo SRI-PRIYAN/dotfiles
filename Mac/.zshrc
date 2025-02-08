@@ -93,6 +93,8 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -124,19 +126,15 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sripriyan/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sripriyan/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/sripriyan/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sripriyan/google-cloud-sdk/completion.zsh.inc'; fi
-
 # Tab completion for kubectl
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
-export PATH="$PATH:/Users/sripriyan/istio-1.17.0/bin"
-
 # FZF configuration
+eval "$(fzf --zsh)"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--reverse --border --cycle --no-separator --no-scrollbar --info=inline:"  󰳟 " --prompt="  " --pointer=" " --color="pointer:#00fa9a,gutter:#2A293E,bg+:#043e62"'
 
+# Created by `pipx` on 2025-02-01 05:32:01
+export PATH="$PATH:/Users/sripriyan/.local/bin"

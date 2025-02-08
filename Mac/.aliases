@@ -13,7 +13,6 @@ alias ep="nvim ~/.zprofile"
 alias et="nvim ~/.config/tmux/tmux.conf"
 
 alias mux="tmuxinator"
-alias sizeof="python3 ~/dotfiles/size_calc.py"
 alias tree="tree -I '.git|node_modules'"
 
 alias javac-algs4="javac -cp .:$HOME/Documents/Others/Algorithms/algs4.jar"
