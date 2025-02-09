@@ -135,6 +135,3 @@ eval "$(fzf --zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--reverse --border --cycle --no-separator --no-scrollbar --info=inline:"  󰳟 " --prompt="  " --pointer=" " --color="pointer:#00fa9a,gutter:#2A293E,bg+:#043e62"'
-
-# Created by `pipx` on 2025-02-01 05:32:01
-export PATH="$PATH:/Users/sripriyan/.local/bin"

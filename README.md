@@ -37,3 +37,21 @@
       ```
 
       ![grade.png](https://i.postimg.cc/029cGLKx/image.png)
+
+3. ### zz
+
+    * Fuzzy Find and `cd` into any previously visited directory conviniently.
+
+    * Utilizes `z` (zsh plugin) which keeps track of already visited directories and `fzf` which is used for Fuzzy Finding.
+
+      [![zz.gif](https://i.postimg.cc/5tqbKFMp/zz-new.gif)](https://postimg.cc/QBt2HCCW)
+
+## Configs
+
+1. ### Delta
+
+    * Checkout `.gitconfig` for delta configuration.
+
+    * To install delta: `brew install git-delta`
+
+      [![image.png](https://i.postimg.cc/Df9gcC7r/image.png)](https://postimg.cc/yWTc1ygx)
