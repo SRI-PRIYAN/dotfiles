@@ -46,6 +46,12 @@ vim.keymap.set('n', '<leader>h', '<C-w>s', getOpts 'Split Window Horizontally')
 vim.keymap.set('n', '<leader>se', '<C-w>=', getOpts 'Make Split Windows Equal Width and Height')
 vim.keymap.set('n', '<leader>xs', ':close<CR>', getOpts 'Close Current Split Window')
 
+-- Resize Splits
+vim.keymap.set('n', '<A-Up>', ':resize +2<CR>', getOpts 'Resize Up')
+vim.keymap.set('n', '<A-Down>', ':resize -2<CR>', getOpts 'Resize Down')
+vim.keymap.set('n', '<A-Left>', ':vertical resize +2<CR>', getOpts 'Resize Left')
+vim.keymap.set('n', '<A-Right>', ':vertical resize -2<CR>', getOpts 'Resize Right')
+
 -- Toggle line wrapping
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', getOpts 'Toggle Line Wrap')
 

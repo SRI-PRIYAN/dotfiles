@@ -15,5 +15,6 @@ return {
       },
     }
     require('telescope').load_extension 'neoclip'
+    vim.keymap.set('n', '<leader>cb', '<CMD>Telescope neoclip<CR>', { desc = 'Open Clipboard History' })
   end,
 }
