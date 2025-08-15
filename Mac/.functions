@@ -30,6 +30,13 @@ function compile() {
     done
 }
 
+function run () {
+    local file=$1;
+    local executable=${file%.*};
+    compile $file;
+    ./${executable};
+}
+
 # creates a dir for the specified codeforces contests and each of which containing subdir for each problem
 # in that contest which in turn contains the sample testcases, output files for the same and the template
 # file if cp_outline.cpp exists in the home directory.
@@ -168,5 +175,30 @@ function mcd(){
 }
 
 function zz() {
-    cd "$(z | awk '{print $2}' | fzf)";
+    cd "$(zoxide query -ls | awk '{print $2}' | fzf)";
+}
+
+# Function from Yazi Documentation to cd when quitting yazi (q)
+# Use Q if you don't want to cd when quitting
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'ls {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo $'{}"         "$@" ;;
+    *)            fzf --preview "bat -n --color=always --line-range :500 {}" "$@" ;;
+  esac
 }

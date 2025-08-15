@@ -88,7 +88,6 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    z
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -98,6 +97,8 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+export BAT_THEME=tokyonight_night
 
 # Colored man pages
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -135,3 +136,8 @@ eval "$(fzf --zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--reverse --border --cycle --no-separator --no-scrollbar --info=inline:"  󰳟 " --prompt="  " --pointer=" " --color="pointer:#00fa9a,gutter:#2A293E,bg+:#043e62"'
+
+# Created by `pipx` on 2025-02-01 05:32:01
+export PATH="$PATH:/Users/sripriyan/.local/bin"
+
+eval "$(zoxide init zsh)"
