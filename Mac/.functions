@@ -14,7 +14,7 @@ function compile() {
         [[ $file =~ $pattern ]] && continue;
 
         #storing the extension and executable of the file
-        local extension=${file#*.};
+        local extension=${file##*.};
         local executable=${file%.*};
         case $extension in
             c)
