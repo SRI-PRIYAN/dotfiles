@@ -9,11 +9,6 @@ end
 -- jk to enter Normal mode
 vim.keymap.set('i', 'jk', '<ESC>', getOpts 'Enter Nomrmal Mode')
 
--- LSP Format Code
-vim.keymap.set('n', '<leader>fm', function()
-  vim.lsp.buf.format { async = true }
-end, getOpts 'LSP Formatting')
-
 -- save file
 vim.keymap.set('n', '<C-s>', '<cmd>w<CR>', getOpts 'Save File with Formatting')
 

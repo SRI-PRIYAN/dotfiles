@@ -9,6 +9,10 @@ return {
     'folke/which-key.nvim',
   },
   {
+    -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
+  },
+  {
     -- Autoclose parentheses, brackets, quotes, etc.
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
@@ -28,5 +32,10 @@ return {
     config = function()
       require('colorizer').setup()
     end,
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    opts = {},
   },
 }

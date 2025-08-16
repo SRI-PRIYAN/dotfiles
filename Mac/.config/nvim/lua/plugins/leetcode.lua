@@ -6,8 +6,11 @@ return {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
   },
-  cmd = 'Leet',
-  opts = {
-    -- configuration goes here
-  },
+  config = function()
+    require('leetcode').setup {
+      cmd = 'Leet',
+    }
+
+    vim.keymap.set('n', '<leader>ld', '<CMD>Leet desc<CR>', { desc = 'Toggle Leetcode Description' })
+  end,
 }
